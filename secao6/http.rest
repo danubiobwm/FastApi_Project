@@ -1,0 +1,55 @@
+@baseUrl = http://127.0.0.1:8000
+
+# ==========================================================
+# --- Artigos ---
+# ==========================================================
+
+### Login (para obter token de autenticação)
+# @name Login
+POST {{baseUrl}}/api/v1/usuarios/login
+Content-Type: application/json
+
+{
+    "username": "usuario@example.com",
+    "password": "senha123"
+}
+
+### Criar Artigo (requer autenticação)
+# @name Criar Artigo
+POST {{baseUrl}}/api/v1/artigos
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.access_token}}
+
+{
+    "titulo": "Título do Artigo",
+    "descricao": "Descrição do Artigo",
+    "url_fonte": "https://exemplo.com/artigo"
+}
+
+### Listar Todos os Artigos
+# @name Listar Artigos
+GET {{baseUrl}}/api/v1/artigos
+Content-Type: application/json
+
+### Obter Artigo por ID
+# @name Obter Artigo
+GET {{baseUrl}}/api/v1/artigos/1
+Content-Type: application/json
+
+### Atualizar Artigo (requer autenticação e ser dono)
+# @name Atualizar Artigo
+PUT {{baseUrl}}/api/v1/artigos/1
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.access_token}}
+
+{
+    "titulo": "Título Atualizado",
+    "descricao": "Descrição Atualizada",
+    "url_fonte": "https://exemplo.com/artigo-atualizado"
+}
+
+### Deletar Artigo (requer autenticação e ser dono)
+# @name Deletar Artigo
+DELETE {{baseUrl}}/api/v1/artigos/1
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.access_token}}

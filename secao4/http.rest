@@ -1,0 +1,42 @@
+@baseUrl = http://127.0.0.1:8000
+
+# ==========================================================
+# --- Secao02 ---
+# ==========================================================
+### Cursos/
+# @name Cursos
+POST {{baseUrl}}/api/v1/cursos
+Content-Type: application/json
+
+{
+    "titulo": "Curso de FastAPI 4",
+    "aulas": 30,
+    "horas": 10
+}
+### Cursos
+# @name Cursos
+GET {{baseUrl}}/api/v1/cursos
+Content-Type: application/json
+
+### Cursos/{curso_id}
+# @name Cursos id
+GET {{baseUrl}}/api/v1/cursos/2
+Content-Type: application/json
+
+### Cursos/{curso_id}
+# @name Cursos Update
+PUT {{baseUrl}}/api/v1/cursos/4
+Content-Type: application/json
+
+{
+    "titulo": "Curso de FastAPI - Atualizado",
+    "aulas": 25,
+    "horas": 12
+}
+
+
+### Cursos/{curso_id}
+# @name Cursos Delete
+
+DELETE {{baseUrl}}/api/v1/cursos/4
+Content-Type: application/json
