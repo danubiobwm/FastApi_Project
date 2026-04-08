@@ -1,55 +1,103 @@
 @baseUrl = http://127.0.0.1:8000
+@contentType = application/json
 
 # ==========================================================
-# --- Artigos ---
+# --- USUÁRIOS ---
 # ==========================================================
 
-### Login (para obter token de autenticação)
+### 1. Signup (Criar Usuário)
+# @name Signup
+POST {{baseUrl}}/api/v1/usuarios/signup
+Content-Type: {{contentType}}
+
+{
+    "nome": "João",
+    "sobrenome": "Silva",
+    "email": "joao@example.com",
+    "senha": "senha123",
+    "eh_admin": false
+}
+
+### 2. Login (Obter Token)
+# Importante: OAuth2 no FastAPI usa form-urlencoded, não JSON
 # @name Login
 POST {{baseUrl}}/api/v1/usuarios/login
-Content-Type: application/json
+Content-Type: application/x-www-form-urlencoded
+
+username=joao@example.com&password=senha123
+
+#### Armazenando o Token do Login ####
+@token = {{Login.response.body.access_token}}
+
+
+### 3. Obter Usuário Logado
+GET {{baseUrl}}/api/v1/usuarios/logado
+Authorization: Bearer {{token}}
+
+### 4. Listar Todos os Usuários
+GET {{baseUrl}}/api/v1/usuarios
+Content-Type: {{contentType}}
+
+### 5. Obter Usuário por ID
+GET {{baseUrl}}/api/v1/usuarios/1
+Content-Type: {{contentType}}
+
+### 6. Atualizar Usuário
+# @name AtualizarUsuario
+PUT {{baseUrl}}/api/v1/usuarios/1
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
-    "username": "usuario@example.com",
-    "password": "senha123"
+    "nome": "João Atualizado",
+    "sobrenome": "Silva Atualizado",
+    "email": "joao.atualizado@example.com",
+    "senha": "nova_senha123",
+    "eh_admin": false
 }
 
-### Criar Artigo (requer autenticação)
-# @name Criar Artigo
+### 7. Deletar Usuário
+DELETE {{baseUrl}}/api/v1/usuarios/1
+Authorization: Bearer {{token}}
+
+
+# ==========================================================
+# --- ARTIGOS ---
+# ==========================================================
+
+### 8. Criar Artigo
+# @name CriarArtigo
 POST {{baseUrl}}/api/v1/artigos
-Content-Type: application/json
-Authorization: Bearer {{login.response.body.access_token}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
-    "titulo": "Título do Artigo",
-    "descricao": "Descrição do Artigo",
-    "url_fonte": "https://exemplo.com/artigo"
+    "titulo": "FastAPI com SQLAlchemy",
+  "descricao": "Aprenda a criar APIs assíncronas",
+  "url_fonte": "https://fastapi.tiangolo.com",
+  "usuario_id": 2
 }
 
-### Listar Todos os Artigos
-# @name Listar Artigos
+### 9. Listar Todos os Artigos
 GET {{baseUrl}}/api/v1/artigos
-Content-Type: application/json
+Content-Type: {{contentType}}
 
-### Obter Artigo por ID
-# @name Obter Artigo
+### 10. Obter Artigo por ID
 GET {{baseUrl}}/api/v1/artigos/1
-Content-Type: application/json
+Content-Type: {{contentType}}
 
-### Atualizar Artigo (requer autenticação e ser dono)
-# @name Atualizar Artigo
+### 11. Atualizar Artigo
 PUT {{baseUrl}}/api/v1/artigos/1
-Content-Type: application/json
-Authorization: Bearer {{login.response.body.access_token}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
-    "titulo": "Título Atualizado",
-    "descricao": "Descrição Atualizada",
-    "url_fonte": "https://exemplo.com/artigo-atualizado"
+    "titulo": "Título Super Atualizado",
+    "descricao": "Descrição nova e melhorada",
+    "url_fonte": "https://google.com",
+    "usuario_id": 2
 }
 
-### Deletar Artigo (requer autenticação e ser dono)
-# @name Deletar Artigo
-DELETE {{baseUrl}}/api/v1/artigos/1
-Content-Type: application/json
-Authorization: Bearer {{login.response.body.access_token}}
+### 12. Deletar Artigo
+DELETE {{baseUrl}}/api/v1/artigos/2
+Authorization: Bearer {{token}}
